@@ -30,8 +30,8 @@
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <relocations>
                                 <relocation>
-                                    <pattern>com.rabbitmq.client</pattern>
-                                    <shadedPattern>me.kevsal.minecraft.gbmc.core.shaded.rabbitmq.client</shadedPattern>
+                                    <pattern>com.rabbitmq</pattern>
+                                    <shadedPattern>me.kevsal.minecraft.gbmc.core.shaded.com.rabbitmq</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
