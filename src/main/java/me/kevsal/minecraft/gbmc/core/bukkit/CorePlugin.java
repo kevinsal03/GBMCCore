@@ -9,7 +9,7 @@ import java.io.File;
 public class CorePlugin extends JavaPlugin implements PlatformIndependentCorePlugin {
 
     @Getter
-    public static CorePlugin instance;
+    private static CorePlugin instance;
 
     @Override
     public void onEnable() {

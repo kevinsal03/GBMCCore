@@ -2,18 +2,36 @@ package me.kevsal.minecraft.gbmc.core.common;
 
 import lombok.Getter;
 
+/***
+ * Core platform-independent functionality of the plugin
+ */
 public class Core {
 
     @Getter
-    public static Core instance;
+    private static Core instance;
+
+    /***
+     * A platform-independent way of accessing the platform-specific plugin
+     */
+    @Getter
+    private PlatformIndependentCorePlugin pluginInstance;
 
     /***
      * Create a new instance of the Core class, and setup all functionality required
      */
-    public Core() {
+    public Core(PlatformIndependentCorePlugin pluginInstance) {
         if(!setInstance()) {
             throw new RuntimeException("An instance of Common Core already exists!");
         }
+        this.pluginInstance = pluginInstance;
+    }
+
+    /***
+     * Prepare the core class for shutdown.
+     */
+    public void destroy() {
+        instance = null;
+        // Add whatever else needs to be null-ed out or shutdown to properly shut the plugin down
     }
 
     /***

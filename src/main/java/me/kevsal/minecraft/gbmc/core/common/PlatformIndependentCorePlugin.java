@@ -3,6 +3,7 @@ package me.kevsal.minecraft.gbmc.core.common;
 import java.io.File;
 
 public interface PlatformIndependentCorePlugin {
+
     /***
      * The main plugin configuration.
      * @return the platform specific configuration as a File

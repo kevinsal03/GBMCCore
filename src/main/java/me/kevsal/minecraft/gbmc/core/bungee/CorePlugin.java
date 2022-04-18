@@ -1,6 +1,7 @@
 package me.kevsal.minecraft.gbmc.core.bungee;
 
 import lombok.Getter;
+import me.kevsal.minecraft.gbmc.core.common.Core;
 import me.kevsal.minecraft.gbmc.core.common.PlatformIndependentCorePlugin;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -9,10 +10,13 @@ import java.io.File;
 public class CorePlugin extends Plugin implements PlatformIndependentCorePlugin {
 
     @Getter
-    public CorePlugin instance;
+    private CorePlugin instance;
+    @Getter
+    private Core coreInstance;
 
     @Override
     public void onEnable(){
+        coreInstance = new Core(getInstance());
         instance = this;
         super.onEnable();
     }
