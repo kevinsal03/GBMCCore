@@ -1,0 +1,6 @@
+name: Core
+main: me.kevsal.minecraft.gbmc.core.bukkit.CorePlugin
+version: ${project.version}
+author: Kevinsal03
+description: Provides core stuff.
+api-version: 1.18

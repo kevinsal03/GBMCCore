@@ -1,0 +1,5 @@
+name: Core
+main: me.kevsal.minecraft.gbmc.core.bungee.CorePlugin
+version: ${project.version}
+author: Kevinsal03
+description: Provides core stuff.
