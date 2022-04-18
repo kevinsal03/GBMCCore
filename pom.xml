@@ -31,7 +31,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>com.rabbitmq.client</pattern>
-                                    <shadedPattern>me.kevsal.minecraft.gmbc.core.shaded.rabbitmq.client</shadedPattern>
+                                    <shadedPattern>me.kevsal.minecraft.gbmc.core.shaded.rabbitmq.client</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
