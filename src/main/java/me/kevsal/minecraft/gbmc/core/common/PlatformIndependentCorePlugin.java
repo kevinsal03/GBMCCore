@@ -5,10 +5,10 @@ import java.io.File;
 public interface PlatformIndependentCorePlugin {
 
     /***
-     * The main plugin configuration.
-     * @return the platform specific configuration as a File
+     * The main plugin configuration directory.
+     * @return File reference to the main configuration directory as provided by the server software.
      */
-    File platformSpecificConfiguration();
+    File platformSpecificDataFolder();
 
     /***
      * Disable the plugin

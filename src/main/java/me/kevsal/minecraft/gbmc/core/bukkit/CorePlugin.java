@@ -25,8 +25,8 @@ public class CorePlugin extends JavaPlugin implements PlatformIndependentCorePlu
 
 
     @Override
-    public File platformSpecificConfiguration() {
-        return null;
+    public File platformSpecificDataFolder() {
+        return getInstance().getDataFolder();
     }
 
     @Override

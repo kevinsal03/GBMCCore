@@ -31,8 +31,8 @@ public class CorePlugin extends Plugin implements PlatformIndependentCorePlugin 
 
 
     @Override
-    public File platformSpecificConfiguration() {
-        return null;
+    public File platformSpecificDataFolder() {
+        return getInstance().getDataFolder();
     }
 
     @Override
