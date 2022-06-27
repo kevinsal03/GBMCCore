@@ -1,6 +1,7 @@
 package me.kevsal.minecraft.gbmc.core.bukkit;
 
 import lombok.Getter;
+import me.kevsal.minecraft.gbmc.core.common.Core;
 import me.kevsal.minecraft.gbmc.core.common.PlatformIndependentCorePlugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -10,16 +11,20 @@ public class CorePlugin extends JavaPlugin implements PlatformIndependentCorePlu
 
     @Getter
     private static CorePlugin instance;
+    @Getter
+    private Core coreInstance;
 
     @Override
     public void onEnable() {
         instance = this;
+        coreInstance = new Core(this);
         super.onEnable();
     }
 
     @Override
     public void onDisable() {
         instance = null;
+        coreInstance.destroy();
         super.onDisable();
     }
 

@@ -25,6 +25,7 @@ public class CorePlugin extends Plugin implements PlatformIndependentCorePlugin 
     public void onDisable(){
         getProxy().getPluginManager().unregisterListeners(getInstance());
         getProxy().getPluginManager().unregisterCommands(getInstance());
+        coreInstance.destroy();
         instance = null;
         super.onDisable();
     }
