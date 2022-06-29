@@ -45,11 +45,14 @@ public class Core {
      * Prepare the core class for shutdown.
      */
     public void destroy() {
-        instance = null;
         // Add whatever else needs to be null-ed out or shutdown to properly shut the plugin down
 
         // Shutdown the RabbitMQ Messaging system
         RabbitMQManager.getInstance().destroy();
+
+
+        // FINALLY, null out the instance
+        instance = null;
     }
 
     /***

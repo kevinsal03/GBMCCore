@@ -75,7 +75,7 @@ public class RabbitMQJsonConfig extends JsonConfiguration {
      */
     public String getVirtualHost() {
         try {
-            return getJsonObject().get("virtualHost").getAsString();
+            return getJsonObject().get("vhost").getAsString();
         } catch (Exception e) {
             Core.getInstance().getLogger().warn("RabbitMQ virtual host not found in config file! Using default virtual host: /");
             return "/";

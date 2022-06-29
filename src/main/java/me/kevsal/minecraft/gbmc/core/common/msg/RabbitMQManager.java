@@ -98,7 +98,7 @@ public class RabbitMQManager {
         messageReceiver = new MessageReceiver(connection, channel);
 
         // Send a HELLO message to the RabbitMQ exchange
-        messageEmitter.sendMessage("HELLO this is \"%s\"".formatted(getInstance().instanceId.toString()));
+        messageEmitter.sendMessage("HELLO this is %s".formatted(getInstance().instanceId.toString()));
     }
 
     /***
@@ -113,13 +113,11 @@ public class RabbitMQManager {
      */
     public void destroy() {
         // Send a BYE message to the RabbitMQ exchange
-        messageEmitter.sendMessage("This is \"%s\". GOODBYE.".formatted(getInstance().instanceId.toString()));
+        messageEmitter.sendMessage("This is %s. GOODBYE.".formatted(getInstance().instanceId.toString()));
         // Close the RabbitMQ channel
         closeRabbitMQChannel();
         // Close the RabbitMQ connection
         closeRabbitMQConnection();
-        // Null the instance
-        instance = null;
         // Get rid of the message handlers
         messageHandlers.clear();
         // Get rid of the message emitter
@@ -128,6 +126,10 @@ public class RabbitMQManager {
         messageReceiver = null;
         // Get rid of the RabbitMQ config
         rabbitMQConfig = null;
+
+
+        // FINALLY, null out the instance
+        instance = null;
     }
 
     /***
@@ -244,7 +246,7 @@ public class RabbitMQManager {
      */
     protected void passMessage(String message) {
         if (getInstance().DEBUG) {
-            Core.getInstance().getLogger().info("[GBMC] RabbitMQManager: Passing message %s to message event handlers".formatted(message));
+            Core.getInstance().getLogger().info("[GBMC] RabbitMQManager: Passing message \"%s\" to message event handlers".formatted(message));
         }
         for (MessageReceiveEvent messageHandler : messageHandlers) {
             messageHandler.onEvent(message);

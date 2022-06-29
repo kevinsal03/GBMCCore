@@ -3,6 +3,7 @@ package me.kevsal.minecraft.gbmc.core.common.msg;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.DeliverCallback;
+import me.kevsal.minecraft.gbmc.core.common.Core;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -38,13 +39,19 @@ public class MessageReceiver {
 
     private void setupMessageReceiver() {
         try {
+            String queueName = channel.queueDeclare().getQueue();
+            channel.queueBind(queueName, EXCHANGE_NAME, "");
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {
                 String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
+                if (RabbitMQManager.getInstance().DEBUG) {
+                    Core.getInstance().getLogger().info("[GBMC] MessageReceiver: Received Message: \"%s\"".formatted(message));
+                }
                 RabbitMQManager.getInstance().passMessage(message);
             };
-            channel.basicConsume(EXCHANGE_NAME, true, deliverCallback, consumerTag -> {});
+            channel.basicConsume(queueName, true, deliverCallback, consumerTag -> {});
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            Core.getInstance().getLogger().warn("Failed to setup message receiver");
         }
     }
 
