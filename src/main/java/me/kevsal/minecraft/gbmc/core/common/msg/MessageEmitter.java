@@ -39,7 +39,13 @@ public class MessageEmitter {
     public void sendMessage(String message) {
         try {
             channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes(StandardCharsets.UTF_8));
+            if (RabbitMQManager.getInstance().DEBUG) {
+                System.out.println("[GBMC] Sent message: " + message);
+            }
         } catch (IOException e) {
+            if (RabbitMQManager.getInstance().DEBUG) {
+                System.out.println("[GBMC] Failed to send message: " + message);
+            }
             throw new RuntimeException(e);
         }
     }

@@ -9,6 +9,7 @@ import me.kevsal.minecraft.gbmc.core.common.Core;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class RabbitMQManager {
 
@@ -58,11 +59,23 @@ public class RabbitMQManager {
 
     private static final ArrayList<MessageReceiveEvent> messageHandlers = new ArrayList<MessageReceiveEvent>();
 
+    // Fetch if this instance of RabitMQ manager should be in debug mode
+    public final boolean DEBUG = rabbitMQConfig.debug();
+
+    public final UUID instanceId = UUID.randomUUID();
+
     /***
      * Create a new instance of the RabbitMQManager class, and setup all functionality required
      * Ensures that only one instance exists
      */
     public RabbitMQManager() {
+
+        if(getInstance().DEBUG) {
+            Core.getInstance().getLogger().info("[GBMC] RabbitMQManager: Initializing RabbitMQManager in DEBUG mode with ID: " + getInstance().instanceId);
+        } else {
+            Core.getInstance().getLogger().info("[GBMC] RabbitMQManager: Initializing RabbitMQManager with ID: " + getInstance().instanceId);
+        }
+
         // Set the instance
         if (instance != null) {
             instance = this;
@@ -80,6 +93,12 @@ public class RabbitMQManager {
 
         // Create the message emitter
         messageEmitter = new MessageEmitter(connection, channel);
+
+        // Create the message receiver
+        messageReceiver = new MessageReceiver(connection, channel);
+
+        // Send a HELLO message to the RabbitMQ exchange
+        messageEmitter.sendMessage("HELLO this is \"%s\"".formatted(getInstance().instanceId.toString()));
     }
 
     /***
@@ -93,6 +112,8 @@ public class RabbitMQManager {
      * Destroy the RabbitMQManager instance
      */
     public void destroy() {
+        // Send a BYE message to the RabbitMQ exchange
+        messageEmitter.sendMessage("This is \"%s\". GOODBYE.".formatted(getInstance().instanceId.toString()));
         // Close the RabbitMQ channel
         closeRabbitMQChannel();
         // Close the RabbitMQ connection
@@ -123,9 +144,15 @@ public class RabbitMQManager {
         factory.setVirtualHost(rabbitMQConfig.getVirtualHost());
         try {
             connection = factory.newConnection("gbmc core version %s".formatted(Core.getInstance().getClass().getPackage().getImplementationVersion()));
+            if (getInstance().DEBUG) {
+                Core.getInstance().getLogger().info("[GBMC] RabbitMQManager: Created RabbitMQ connection");
+            }
             return true;
         } catch (Exception e) {
             e.printStackTrace();
+            if (getInstance().DEBUG) {
+                Core.getInstance().getLogger().info("[GBMC] RabbitMQManager: Failed to create RabbitMQ connection");
+            }
             return false;
         }
     }
@@ -137,6 +164,9 @@ public class RabbitMQManager {
         // Create the channel
         try {
             channel = connection.createChannel();
+            if (getInstance().DEBUG) {
+                Core.getInstance().getLogger().info("[GBMC] RabbitMQManager: Created RabbitMQ channel");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -148,6 +178,9 @@ public class RabbitMQManager {
     private void createExchange() {
         try {
             channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+            if (getInstance().DEBUG) {
+                Core.getInstance().getLogger().info("[GBMC] RabbitMQManager: Created RabbitMQ exchange");
+            }
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to create the RabbitMQ exchange!");
@@ -161,6 +194,9 @@ public class RabbitMQManager {
         // Close the channel
         try {
             channel.close();
+            if (getInstance().DEBUG) {
+                Core.getInstance().getLogger().info("[GBMC] RabbitMQManager: Closed RabbitMQ channel");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -173,6 +209,9 @@ public class RabbitMQManager {
         // Close the connection
         try {
             connection.close();
+            if (getInstance().DEBUG) {
+                Core.getInstance().getLogger().info("[GBMC] RabbitMQManager: Closed RabbitMQ connection");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -184,6 +223,9 @@ public class RabbitMQManager {
      */
     public void addMessageHandler(MessageReceiveEvent messageHandler) {
         messageHandlers.add(messageHandler);
+        if (getInstance().DEBUG) {
+            Core.getInstance().getLogger().info("[GBMC] RabbitMQManager: Registered message handler %s".formatted(messageHandler.getClass().getName()));
+        }
     }
 
     /***
@@ -192,6 +234,9 @@ public class RabbitMQManager {
      */
     public void removeMessageHandler(MessageReceiveEvent messageHandler) {
         messageHandlers.remove(messageHandler);
+        if (getInstance().DEBUG) {
+            Core.getInstance().getLogger().info("[GBMC] RabbitMQManager: Unregistered message handler %s".formatted(messageHandler.getClass().getName()));
+        }
     }
 
     /***
@@ -199,6 +244,9 @@ public class RabbitMQManager {
      * @param message The message to pass
      */
     protected void passMessage(String message) {
+        if (getInstance().DEBUG) {
+            Core.getInstance().getLogger().info("[GBMC] RabbitMQManager: Passing message %s to message event handlers".formatted(message));
+        }
         for (MessageReceiveEvent messageHandler : messageHandlers) {
             messageHandler.onEvent(message);
         }

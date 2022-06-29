@@ -75,4 +75,12 @@ public class RabbitMQJsonConfig extends JsonConfiguration {
         }
         return virtualHost;
     }
+
+    /***
+     * Debugging is enabled
+     * @return true if debugging is enabled, false if not
+     */
+    public boolean debug() {
+        return getJsonObject().get("debug").getAsBoolean();
+    }
 }
