@@ -20,12 +20,12 @@ public class RabbitMQJsonConfig extends JsonConfiguration {
      * Get the RabbitMQ hostname
      * @return The RabbitMQ hostname
      */
-    public String getHostname() {
-        String hostname = getJsonObject().get("hostname").getAsString();
-        if (hostname == null) {
-            hostname = "localhost";
+    public String getHost() {
+        String host = getJsonObject().get("host").getAsString();
+        if (host == null) {
+            host = "localhost";
         }
-        return hostname;
+        return host;
     }
 
     /***
@@ -34,7 +34,7 @@ public class RabbitMQJsonConfig extends JsonConfiguration {
      */
     public int getPort() {
         int port = getJsonObject().get("port").getAsInt();
-        if (port == 0) {
+        if (port == 0 || port < 0) {
             port = 5672;
         }
         return port;

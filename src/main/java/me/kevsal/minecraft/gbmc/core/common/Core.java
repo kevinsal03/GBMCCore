@@ -1,6 +1,7 @@
 package me.kevsal.minecraft.gbmc.core.common;
 
 import lombok.Getter;
+import me.kevsal.minecraft.gbmc.core.common.msg.RabbitMQManager;
 
 /***
  * Core platform-independent functionality of the plugin
@@ -24,6 +25,9 @@ public class Core {
             throw new RuntimeException("An instance of Common Core already exists!");
         }
         this.pluginInstance = pluginInstance;
+
+        // Startup the RabbitMQ Messaging system
+        RabbitMQManager.init();
     }
 
     /***
@@ -32,6 +36,9 @@ public class Core {
     public void destroy() {
         instance = null;
         // Add whatever else needs to be null-ed out or shutdown to properly shut the plugin down
+
+        // Shutdown the RabbitMQ Messaging system
+        RabbitMQManager.getInstance().destroy();
     }
 
     /***
