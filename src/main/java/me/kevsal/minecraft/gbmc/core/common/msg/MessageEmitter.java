@@ -2,6 +2,7 @@ package me.kevsal.minecraft.gbmc.core.common.msg;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
+import me.kevsal.minecraft.gbmc.core.common.Core;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -40,11 +41,11 @@ public class MessageEmitter {
         try {
             channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes(StandardCharsets.UTF_8));
             if (RabbitMQManager.getInstance().DEBUG) {
-                System.out.println("[GBMC] Sent message: " + message);
+                Core.getInstance().getLogger().info("[GBMC] Sent message: " + message);
             }
         } catch (IOException e) {
             if (RabbitMQManager.getInstance().DEBUG) {
-                System.out.println("[GBMC] Failed to send message: " + message);
+                Core.getInstance().getLogger().warn("[GBMC] Failed to send message: " + message);
             }
             throw new RuntimeException(e);
         }

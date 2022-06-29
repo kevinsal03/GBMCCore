@@ -27,8 +27,10 @@ public class CorePlugin extends JavaPlugin implements PlatformIndependentCorePlu
 
     @Override
     public void onDisable() {
-        instance = null;
         coreInstance.destroy();
+
+        // FINALLY, null out the instance
+        instance = null;
         super.onDisable();
     }
 
