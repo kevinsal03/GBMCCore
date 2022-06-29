@@ -22,9 +22,15 @@ public interface PlatformIndependentCorePlugin {
     void disablePlugin(String reason);
 
     /***
-     * Disable the plugin with a reason and with a clas
+     * Disable the plugin with a reason and with a disabler class
      * @param reason The reason the plugin is being disabled. Logged for debugging.
      * @param disabler The class of the object disabling the plugin. Logged for debugging.
      */
      void disablePlugin(String reason, Class disabler);
+
+    /***
+     * Get the platform independent logger.
+     * @return PlatformIndependentLogger instance.
+     */
+    PlatformIndependentLogger getWrappedLogger();
 }

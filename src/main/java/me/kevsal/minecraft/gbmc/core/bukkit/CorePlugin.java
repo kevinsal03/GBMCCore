@@ -1,6 +1,7 @@
 package me.kevsal.minecraft.gbmc.core.bukkit;
 
 import lombok.Getter;
+import me.kevsal.minecraft.gbmc.core.bukkit.util.LoggerWrapper;
 import me.kevsal.minecraft.gbmc.core.common.Core;
 import me.kevsal.minecraft.gbmc.core.common.PlatformIndependentCorePlugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,6 +14,9 @@ public class CorePlugin extends JavaPlugin implements PlatformIndependentCorePlu
     private static CorePlugin instance;
     @Getter
     private Core coreInstance;
+
+    @Getter
+    private final LoggerWrapper wrappedLogger = new LoggerWrapper();
 
     @Override
     public void onEnable() {

@@ -15,7 +15,10 @@ public class Core {
      * A platform-independent way of accessing the platform-specific plugin
      */
     @Getter
-    private PlatformIndependentCorePlugin pluginInstance;
+    private final PlatformIndependentCorePlugin pluginInstance;
+
+    @Getter
+    private final PlatformIndependentLogger logger;
 
     /***
      * Create a new instance of the Core class, and setup all functionality required
@@ -25,6 +28,9 @@ public class Core {
             throw new RuntimeException("An instance of Common Core already exists!");
         }
         this.pluginInstance = pluginInstance;
+
+        // Get the logger from the underlying native plugin
+        logger = getPluginInstance().getWrappedLogger();
 
         // Startup the RabbitMQ Messaging system
         RabbitMQManager.init();
