@@ -69,22 +69,22 @@ public class RabbitMQManager {
      * Ensures that only one instance exists
      */
     public RabbitMQManager() {
-
-        if(getInstance().DEBUG) {
-            Core.getInstance().getLogger().info("[GBMC] RabbitMQManager: Initializing RabbitMQManager in DEBUG mode with ID: " + getInstance().instanceId);
-        } else {
-            Core.getInstance().getLogger().info("[GBMC] RabbitMQManager: Initializing RabbitMQManager with ID: " + getInstance().instanceId);
-        }
-
         // Set the instance
-        if (instance != null) {
+        if (instance == null) {
             instance = this;
         } else {
             throw new RuntimeException("An instance of RabbitMQManager already exists!");
         }
 
+        if(DEBUG) {
+            Core.getInstance().getLogger().info("[GBMC] RabbitMQManager: Initializing RabbitMQManager in DEBUG mode with ID: " + getInstance().instanceId);
+        } else {
+            Core.getInstance().getLogger().info("[GBMC] RabbitMQManager: Initializing RabbitMQManager with ID: " + getInstance().instanceId);
+        }
+
+
         // Connect to RabbitMQ
-        createRabbitMQChannel();
+        createRabbitMQConnection();
         // Create the RabbitMQ channel
         createRabbitMQChannel();
 
@@ -150,9 +150,7 @@ public class RabbitMQManager {
             return true;
         } catch (Exception e) {
             e.printStackTrace();
-            if (getInstance().DEBUG) {
-                Core.getInstance().getLogger().info("[GBMC] RabbitMQManager: Failed to create RabbitMQ connection");
-            }
+            Core.getInstance().getLogger().warn("[GBMC] RabbitMQManager: Failed to create RabbitMQ connection");
             return false;
         }
     }
@@ -169,6 +167,7 @@ public class RabbitMQManager {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            Core.getInstance().getLogger().warn("[GBMC] RabbitMQManager: Failed to create RabbitMQ channel");
         }
     }
 
@@ -183,7 +182,7 @@ public class RabbitMQManager {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException("Failed to create the RabbitMQ exchange!");
+            Core.getInstance().getLogger().warn("[GBMC] RabbitMQManager: Failed to create RabbitMQ exchange");
         }
     }
 

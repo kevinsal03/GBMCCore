@@ -1,5 +1,6 @@
 package me.kevsal.minecraft.gbmc.core.common.msg;
 
+import me.kevsal.minecraft.gbmc.core.common.Core;
 import me.kevsal.minecraft.gbmc.core.common.util.JsonConfiguration;
 
 import java.io.File;
@@ -21,11 +22,12 @@ public class RabbitMQJsonConfig extends JsonConfiguration {
      * @return The RabbitMQ hostname
      */
     public String getHost() {
-        String host = getJsonObject().get("host").getAsString();
-        if (host == null) {
-            host = "localhost";
+        try {
+            return getJsonObject().get("host").getAsString();
+        } catch (Exception e) {
+            Core.getInstance().getLogger().warn("RabbitMQ hostname not found in config file! Using default hostname: localhost");
+            return "localhost";
         }
-        return host;
     }
 
     /***
@@ -33,11 +35,12 @@ public class RabbitMQJsonConfig extends JsonConfiguration {
      * @return The RabbitMQ port
      */
     public int getPort() {
-        int port = getJsonObject().get("port").getAsInt();
-        if (port == 0 || port < 0) {
-            port = 5672;
+        try {
+            return getJsonObject().get("port").getAsInt();
+        } catch (Exception e) {
+            Core.getInstance().getLogger().warn("RabbitMQ port not found in config file! Using default port: 5672");
+            return 5672;
         }
-        return port;
     }
 
     /***
@@ -45,11 +48,12 @@ public class RabbitMQJsonConfig extends JsonConfiguration {
      * @return The RabbitMQ username
      */
     public String getUsername() {
-        String username = getJsonObject().get("username").getAsString();
-        if (username == null) {
-            username = "guest";
+        try{
+            return getJsonObject().get("username").getAsString();
+        } catch (Exception e) {
+            Core.getInstance().getLogger().warn("RabbitMQ username not found in config file! Using default username: guest");
+            return "guest";
         }
-        return username;
     }
 
     /***
@@ -57,11 +61,12 @@ public class RabbitMQJsonConfig extends JsonConfiguration {
      * @return The RabbitMQ password
      */
     public String getPassword() {
-        String password = getJsonObject().get("password").getAsString();
-        if (password == null) {
-            password = "guest";
+        try {
+            return getJsonObject().get("password").getAsString();
+        } catch (Exception e) {
+            Core.getInstance().getLogger().warn("RabbitMQ password not found in config file! Using default password: guest");
+            return "guest";
         }
-        return password;
     }
 
     /***
@@ -69,11 +74,12 @@ public class RabbitMQJsonConfig extends JsonConfiguration {
      * @return The RabbitMQ virtual host
      */
     public String getVirtualHost() {
-        String virtualHost = getJsonObject().get("vhost").getAsString();
-        if (virtualHost == null) {
-            virtualHost = "/";
+        try {
+            return getJsonObject().get("virtualHost").getAsString();
+        } catch (Exception e) {
+            Core.getInstance().getLogger().warn("RabbitMQ virtual host not found in config file! Using default virtual host: /");
+            return "/";
         }
-        return virtualHost;
     }
 
     /***
@@ -81,6 +87,12 @@ public class RabbitMQJsonConfig extends JsonConfiguration {
      * @return true if debugging is enabled, false if not
      */
     public boolean debug() {
-        return getJsonObject().get("debug").getAsBoolean();
+        try {
+            return getJsonObject().get("debug").getAsBoolean();
+        } catch (Exception e) {
+            Core.getInstance().getLogger().warn("RabbitMQ debug not found in config file! Debugging is enabled as the configuration is likely corrupt.");
+            return true;
+        }
+
     }
 }

@@ -20,8 +20,8 @@ public class CorePlugin extends Plugin implements PlatformIndependentCorePlugin 
 
     @Override
     public void onEnable(){
-        coreInstance = new Core(getInstance());
         instance = this;
+        coreInstance = new Core(this);
         super.onEnable();
     }
 

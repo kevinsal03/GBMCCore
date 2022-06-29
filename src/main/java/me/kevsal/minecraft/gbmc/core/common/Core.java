@@ -33,7 +33,12 @@ public class Core {
         logger = getPluginInstance().getWrappedLogger();
 
         // Startup the RabbitMQ Messaging system
-        RabbitMQManager.init();
+        try {
+            RabbitMQManager.init();
+        } catch (Exception e) {
+            getLogger().warn("Failed to start RabbitMQ messaging system!");
+            e.printStackTrace();
+        }
     }
 
     /***
