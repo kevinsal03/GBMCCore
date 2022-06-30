@@ -3,12 +3,12 @@ package me.kevsal.minecraft.gbmc.core.common.util;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.Getter;
+import me.kevsal.minecraft.gbmc.core.common.Core;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 /***
@@ -41,6 +41,21 @@ public class JsonConfiguration {
      */
     public JsonConfiguration(String configName, File file) {
         this.file = file;
+
+        // Copy the original file from resources to the disk if it doesn't exist
+        try {
+            // Do not overwrite
+            Files.copy(Objects.requireNonNull(getClass().getResourceAsStream("/%s".formatted(configName))), file.toPath());
+            Core.getInstance().getLogger().info("Copied default config %s to %s".formatted(configName, file.getAbsolutePath()));
+        } catch (FileAlreadyExistsException ignored) {
+            // File already exists, do nothing
+        } catch (IOException e) {
+            e.printStackTrace();
+            Core.getInstance().getLogger().warn("Failed to copy default configuration file to %s".formatted(file.getAbsolutePath()));
+            Core.getInstance().getLogger().warn("Please make sure you have the correct permissions to write to the directory");
+            Core.getInstance().getLogger().warn("If default values are provided by the configuration manager, they will be used. Expect issues!");
+        }
+
         this.jsonObject = getJsonFromFile(this.file);
         this.configName = configName;
     }

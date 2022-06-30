@@ -14,7 +14,7 @@ public class RabbitMQJsonConfig extends JsonConfiguration {
      * Create the RabbitMQ Json Config Java object and setup all functionality required
      */
     public RabbitMQJsonConfig(File dataFolder) {
-        super("RabbitMQ", new File(dataFolder, "rabbitmq-config.json"));
+        super("rabbitmq-config.json", new File(dataFolder, "rabbitmq-config.json"));
     }
 
     /***

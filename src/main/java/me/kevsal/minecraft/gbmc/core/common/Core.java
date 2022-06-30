@@ -3,6 +3,8 @@ package me.kevsal.minecraft.gbmc.core.common;
 import lombok.Getter;
 import me.kevsal.minecraft.gbmc.core.common.msg.RabbitMQManager;
 
+import java.io.File;
+
 /***
  * Core platform-independent functionality of the plugin
  */
@@ -32,6 +34,9 @@ public class Core {
         // Get the logger from the underlying native plugin
         logger = getPluginInstance().getWrappedLogger();
 
+        // Ensure that the config directory exists
+        ensureFolderExists(getPluginInstance().platformSpecificDataFolder());
+
         // Startup the RabbitMQ Messaging system
         try {
             RabbitMQManager.init();
@@ -53,6 +58,16 @@ public class Core {
 
         // FINALLY, null out the instance
         instance = null;
+    }
+
+    /***
+     * Ensure that the given folder exists. If it doesn't, create it.
+     * @param directory The folder to ensure exists
+     */
+    public void ensureFolderExists(File directory) {
+        if(!directory.exists()) {
+            directory.mkdirs();
+        }
     }
 
     /***
