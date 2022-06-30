@@ -32,3 +32,14 @@ jobs:
       run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
       env:
         GITHUB_TOKEN: ${{ github.token }}
+    - name: Delombok source
+      run: mvn lombok:delombok
+    - name: Build Javadoc
+      run: mvn javadoc:javadoc
+    - name: Deploy Javadoc
+      uses: JamesIves/github-pages-deploy-action@3.5.9
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: javadoc
+        CLEAN: true
+        FOLDER: target/site/apidocs
