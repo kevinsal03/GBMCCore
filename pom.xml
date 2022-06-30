@@ -124,4 +124,12 @@
         </dependency>
     </dependencies>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/kevinsal03/gbmccore</url>
+        </repository>
+    </distributionManagement>
+
 </project>
