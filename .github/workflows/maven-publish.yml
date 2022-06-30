@@ -39,7 +39,7 @@ jobs:
     - name: Deploy Javadoc
       uses: JamesIves/github-pages-deploy-action@3.5.9
       with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ github.token }}
         BRANCH: javadoc
         CLEAN: true
         FOLDER: target/site/apidocs
