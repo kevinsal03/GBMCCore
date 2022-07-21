@@ -38,6 +38,9 @@ public class MessageEmitter {
      * @param message The message to send
      */
     public void sendMessage(String message) {
+        // Add instance ID so doesn't receive own messages
+        message = RabbitMQManager.getInstance().getInstanceId() + "|" + message;
+
         try {
             channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes(StandardCharsets.UTF_8));
             if (RabbitMQManager.getInstance().DEBUG) {

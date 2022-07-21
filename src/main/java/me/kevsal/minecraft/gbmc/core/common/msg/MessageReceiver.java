@@ -46,6 +46,12 @@ public class MessageReceiver {
                 if (RabbitMQManager.getInstance().DEBUG) {
                     Core.getInstance().getLogger().info("[GBMC] MessageReceiver: Received Message: \"%s\"".formatted(message));
                 }
+                // Prevent receiving own messages
+                if (message.startsWith(RabbitMQManager.getInstance().getInstanceId() + "|")) {
+                    return;
+                }
+                // Strip instance ID
+                message = message.substring(message.indexOf("|") + 1);
                 RabbitMQManager.getInstance().passMessage(message);
             };
             channel.basicConsume(queueName, true, deliverCallback, consumerTag -> {});

@@ -62,6 +62,7 @@ public class RabbitMQManager {
     // Fetch if this instance of RabitMQ manager should be in debug mode
     public final boolean DEBUG = rabbitMQConfig.debug();
 
+    @Getter
     public final UUID instanceId = UUID.randomUUID();
 
     /***
