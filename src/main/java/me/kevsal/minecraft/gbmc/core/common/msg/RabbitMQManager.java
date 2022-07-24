@@ -5,6 +5,7 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import lombok.Getter;
 import me.kevsal.minecraft.gbmc.core.common.Core;
+import org.bukkit.entity.Rabbit;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +19,13 @@ public class RabbitMQManager {
      */
     @Getter
     private static RabbitMQManager instance;
+
+    /***
+     * Is the RabbitMQ connection ready?
+     */
+    @Getter
+    private boolean isReady = false;
+
     /***
      * A platform-independent way of accessing the platform-specific data folder
      */
@@ -100,6 +108,9 @@ public class RabbitMQManager {
 
         // Send a HELLO message to the RabbitMQ exchange
         messageEmitter.sendMessage("HELLO this is %s".formatted(getInstance().instanceId.toString()));
+
+        isReady = true;
+        Core.getInstance().rabbitMQManagerThread.isReady = true;
     }
 
     /***

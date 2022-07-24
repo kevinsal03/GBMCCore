@@ -48,6 +48,9 @@ public class MessageReceiver {
                 }
                 // Prevent receiving own messages
                 if (message.startsWith(RabbitMQManager.getInstance().getInstanceId() + "|")) {
+                    if (RabbitMQManager.getInstance().DEBUG) {
+                        Core.getInstance().getLogger().info("[GBMC] MessageReceiver: Skipping own message \"%s\"".formatted(message));
+                    }
                     return;
                 }
                 // Strip instance ID
