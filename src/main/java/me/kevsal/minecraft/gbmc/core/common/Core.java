@@ -50,17 +50,18 @@ public class Core {
         // Startup the message manager thread
         rabbitMQManagerThread.start();
 
-        /*
-        // Startup the RabbitMQ Messaging system
-        try {
-            RabbitMQManager.init();
-        } catch (Exception e) {
-            getLogger().warn("Failed to start RabbitMQ messaging system!");
-            e.printStackTrace();
-        }*/
-
-
         // Wait for Async threads to be ready before letting the server continue loading
+        try {
+            Core.getInstance().getLogger().info("Waiting for RabbitMQManager (Thread) to be ready...");
+            int startTime = (int) System.currentTimeMillis();
+            rabbitMQManagerThread.getLatch().await();
+            int endTime = (int) System.currentTimeMillis();
+            Core.getInstance().getLogger().info("RabbitMQManager (Thread) loaded in " + (endTime - startTime) + "ms!");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        /* Deprecated
         int sleepTime = 300; //starts at checking every 300ms, maxes out at 5000ms
         while(!rabbitMQManagerThread.isReady()) {
             try {
@@ -71,6 +72,7 @@ public class Core {
                 e.printStackTrace();
             }
         }
+        */
 
     }
 
